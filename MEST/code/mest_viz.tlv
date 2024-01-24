@@ -185,9 +185,28 @@ module m5_user_module_name (
             $instr[31:0] = /fpga|cpu/imem<>0$instr;
             $instr_str[40*8-1:0] = *instr_strs[imem];
             \viz_js
-               box: {width: 500, height: 18, strokeWidth: 0},
+               box: {
+                  width: 500,
+                  height: 20,
+                  fill: "#32363b",
+                  stroke: "white",
+                  strokeWidth: 1
+               },
+               all: {
+                  box: {strokeWidth: 0},
+                  init() {
+                        let regname = new fabric.Text("🗃️ Instruction Memory", {
+                           top: -22,
+                           left: 150,
+                           fontSize: 14,
+                           fontFamily: "monospace",
+                           fill: "#aee6fc", // sky blue
+                        });
+                     return {regname};
+                  }
+               },
                onTraceData() {
-                  let instr_str = '$instr'.asBinaryStr(NaN) + "    " + '$instr_str'.asString();
+                  let instr_str = '$instr'.asBinaryStr(NaN) + "        " + '$instr_str'.asString();
                   return {objects: {instr_str: new fabric.Text(instr_str, {
                      top: 0,
                      left: 0,
@@ -196,7 +215,7 @@ module m5_user_module_name (
                      fill: "white"
                   })}};
                },
-               where: {left: -450, top: 0}
+               where: {top: -20, left: -450}
              
       @0
          /defaults
@@ -274,12 +293,13 @@ module m5_user_module_name (
                // PC instr_mem pointer
                //
                let $pc = '$pc';
-               let color = !('$valid'.asBool()) ? "red" : "green";
+               let color = !('$valid'.asBool()) ? "#ff6363" : "#9ffcb5"; // red : green
                let pcPointer = new fabric.Text("➥", {
-                  top: 18 * ($pc.asInt() / 4) - 6,
-                  left: -166,
+                  // top: 20,
+                  top: 20 * ($pc.asInt() / 4) - 1,
+                  left: -141, // or -166
                   fill: color,
-                  fontSize: 24,
+                  fontSize: 22,
                   fontFamily: "monospace"
                });
                //
